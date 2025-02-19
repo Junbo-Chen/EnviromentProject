@@ -1,4 +1,4 @@
-using EnviromentProject.Data;
+﻿using EnviromentProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,9 +16,10 @@ namespace EnviromentProject
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            if (string.IsNullOrEmpty(connectionString)) {
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(connectionString);
+            if (string.IsNullOrEmpty(connectionString))
+            {
                 throw new ArgumentException("No connection string found in appsettings.json");
             }
 
@@ -29,7 +30,8 @@ namespace EnviromentProject
 
 
             var app = builder.Build();
-            
+            app.MapGet("/", () => $"The API is up . Connection string found: : {(sqlConnectionStringFound ? "✔" : "❌")}");
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
