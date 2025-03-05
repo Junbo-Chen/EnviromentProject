@@ -1,72 +1,99 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using EnviromentProject.Model;
 using System.Collections.Generic;
+using EnviromentProject.Model;
+using EnviromentProject.Data;
 using Object = EnviromentProject.Model.Object;
 
 namespace EnviromentProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/objects")]
     [ApiController]
     public class ObjectController : ControllerBase
     {
-        private static List<Object> _objects = new List<Object>();
+        private readonly ObjectRepository _objectRepository;
 
-        // GET: api/Object
-        [HttpGet]
-        public ActionResult<IEnumerable<Object>> GetObjects()
+        public ObjectController(ObjectRepository objectRepository)
         {
-            return _objects;
+            _objectRepository = objectRepository;
         }
 
-        // GET: api/Object/5
+        // 🔹 GET: api/objects/{environmentId}
+        [HttpGet("environment/{environmentId}")]
+        public ActionResult<IEnumerable<Object>> GetObjectsByEnvironmentId(Guid environmentId)
+        {
+            var objects = _objectRepository.GetObjectsByEnvironmentId(environmentId);
+            if (objects == null)
+            {
+                return NotFound();
+            }
+            return Ok(objects);
+        }
+
+        // 🔹 GET: api/objects/{id}
         [HttpGet("{id}")]
         public ActionResult<Object> GetObject(Guid id)
         {
-            var obj = _objects.Find(o => o.Id == id);
+            var obj = _objectRepository.GetObjectById(id);
             if (obj == null)
             {
                 return NotFound();
             }
-            return obj;
+            return Ok(obj);
         }
 
-        // POST: api/Object
+        // 🔹 POST: api/objects
         [HttpPost]
-        public ActionResult<Object> PostObject([FromBody] Object obj)
+        public ActionResult CreateObject2D([FromBody] Object obj)
         {
-            _objects.Add(obj);
-            return CreatedAtAction(nameof(GetObject), new { id = obj.Id }, obj);
+            if (obj == null)
+            {
+                return BadRequest(new { ErrorMessage = "Object2D is null or missing required fields." });
+            }
+
+            try
+            {
+                _objectRepository.InsertObject(obj);
+                return CreatedAtAction(nameof(GetObject), new { id = obj.Id }, obj);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorMessage = $"Error while creating object: {ex.Message}" });
+            }
         }
 
-        // PUT: api/Object/5
+        // 🔹 PUT: api/objects/{id}
         [HttpPut("{id}")]
-        public IActionResult PutObject(Guid id, [FromBody] Object obj)
+        public ActionResult Put(Guid id, [FromBody] Object updatedObject)
         {
-            var existingObj = _objects.Find(o => o.Id == id);
-            if (existingObj == null)
+            var existingObject = _objectRepository.GetObjectById(id);
+            if (existingObject == null)
             {
                 return NotFound();
             }
-            existingObj.PrefabId = obj.PrefabId;
-            existingObj.PositionX = obj.PositionX;
-            existingObj.PositionY = obj.PositionY;
-            existingObj.ScaleX = obj.ScaleX;
-            existingObj.ScaleY = obj.ScaleY;
-            existingObj.RotationZ = obj.RotationZ;
-            existingObj.SortingLayer = obj.SortingLayer;
+
+            existingObject.PrefabId = updatedObject.PrefabId;
+            existingObject.PositionX = updatedObject.PositionX;
+            existingObject.PositionY = updatedObject.PositionY;
+            existingObject.ScaleX = updatedObject.ScaleX;
+            existingObject.ScaleY = updatedObject.ScaleY;
+            existingObject.RotationZ = updatedObject.RotationZ;
+            existingObject.SortingLayer = updatedObject.SortingLayer;
+
+            _objectRepository.UpdateObject(existingObject);
             return NoContent();
         }
 
-        // DELETE: api/Object/5
+        // 🔹 DELETE: api/objects/{id}
         [HttpDelete("{id}")]
-        public IActionResult DeleteObject(Guid id)
+        public ActionResult Delete(Guid id)
         {
-            var obj = _objects.Find(o => o.Id == id);
+            var obj = _objectRepository.GetObjectById(id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _objects.Remove(obj);
+
+            _objectRepository.DeleteObject(id);
             return NoContent();
         }
     }

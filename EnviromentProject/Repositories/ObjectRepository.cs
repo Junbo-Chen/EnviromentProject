@@ -16,14 +16,13 @@ namespace EnviromentProject.Data
             _dbHelper = dbHelper;
         }
 
-        // 🔹 Haal alle objecten op
-        public IEnumerable<Object> GetAllObjects()
+        public IEnumerable<Object> GetObjectsByEnvironmentId(Guid environmentId)
         {
             using var connection = _dbHelper.CreateConnection();
-            return connection.Query<Object>("SELECT * FROM Object");
+            return connection.Query<Object>(
+                "SELECT * FROM Object WHERE EnvironmentId = @EnvironmentId", new { EnvironmentId = environmentId });
         }
 
-        // 🔹 Haal een specifiek object op via ID
         public Object GetObjectById(Guid id)
         {
             using var connection = _dbHelper.CreateConnection();
@@ -31,19 +30,27 @@ namespace EnviromentProject.Data
                 "SELECT * FROM Object WHERE Id = @Id", new { Id = id });
         }
 
-        // 🔹 Voeg een nieuw object toe
         public void InsertObject(Object obj)
         {
             using var connection = _dbHelper.CreateConnection();
-            obj.Id = Guid.NewGuid();
-            string sql = @"INSERT INTO Object 
-                          (PrefabId, PositionX, PositionY, ScaleX, ScaleY, RotationZ, SortingLayer, EnvironmentId)
-                          VALUES 
-                          (@PrefabId, @PositionX, @PositionY, @ScaleX, @ScaleY, @RotationZ, @SortingLayer, @EnvironmentId)";
+            obj.Id = Guid.NewGuid();  // Genereer een nieuwe ID
+
+            string sql = "INSERT INTO Object (Id, PrefabId, EnvironmentId, PositionX, PositionY, ScaleX, ScaleY, RotationZ, SortingLayer) " +
+                         "VALUES (@Id, @PrefabId, @EnvironmentId, @PositionX, @PositionY, @ScaleX, @ScaleY, @RotationZ, @SortingLayer)";
+
             connection.Execute(sql, obj);
         }
 
-        // 🔹 Verwijder een object op basis van ID
+        public void UpdateObject(Object obj)
+        {
+            using var connection = _dbHelper.CreateConnection();
+            string sql = @"UPDATE Object 
+                           SET PrefabId = @PrefabId, PositionX = @PositionX, PositionY = @PositionY,
+                               ScaleX = @ScaleX, ScaleY = @ScaleY, RotationZ = @RotationZ, SortingLayer = @SortingLayer
+                           WHERE Id = @Id";
+            connection.Execute(sql, obj);
+        }
+
         public void DeleteObject(Guid id)
         {
             using var connection = _dbHelper.CreateConnection();
@@ -51,4 +58,5 @@ namespace EnviromentProject.Data
         }
     }
 }
+
 

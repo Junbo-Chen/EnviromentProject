@@ -32,9 +32,17 @@ namespace EnviromentProject.Data
         {
             using var connection = _dbHelper.CreateConnection();
             environment.Id = Guid.NewGuid();
-            string sql = "INSERT INTO Environment (Name, MaxHeight, MaxLength, UserId) " +
-                         "VALUES (@Name, @MaxHeight, @MaxLength, @UserId)";
+
+            string sql = "INSERT INTO Environment (Id, Name, MaxHeight, MaxLength, UserId) " +
+                         "VALUES (@Id, @Name, @MaxHeight, @MaxLength, @UserId)";
+
             connection.Execute(sql, environment);
+        }
+        public IEnumerable<Environment> GetEnvironmentsByUserId(string userId)
+        {
+            using var connection = _dbHelper.CreateConnection();
+            return connection.Query<Environment>(
+                "SELECT * FROM Environment WHERE UserId = @UserId", new { UserId = userId });
         }
 
         public void UpdateEnvironment(Environment environment)

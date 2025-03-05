@@ -21,7 +21,15 @@ namespace EnviromentProject.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Environment>> Get()
         {
-            var environments = _environmentRepository.GetAllEnvironments();
+            // Haal UserId op uit JWT-token
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not authenticated.");
+            }
+
+            var environments = _environmentRepository.GetEnvironmentsByUserId(userId);
             return Ok(environments);
         }
 
@@ -46,6 +54,16 @@ namespace EnviromentProject.Controllers
                 return BadRequest("Invalid environment data.");
             }
 
+            // Haal UserId op uit JWT-token
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not authenticated.");
+            }
+
+            environment.UserId = userId; // Koppel de gebruiker aan het Environment-object
+
             _environmentRepository.InsertEnvironment(environment);
             return CreatedAtAction(nameof(Get), new { id = environment.Id }, environment);
         }
@@ -63,7 +81,6 @@ namespace EnviromentProject.Controllers
             existingEnvironment.Name = updatedEnvironment.Name;
             existingEnvironment.MaxHeight = updatedEnvironment.MaxHeight;
             existingEnvironment.MaxLength = updatedEnvironment.MaxLength;
-            existingEnvironment.UserId = updatedEnvironment.Id;
 
             _environmentRepository.UpdateEnvironment(existingEnvironment);
             return NoContent();

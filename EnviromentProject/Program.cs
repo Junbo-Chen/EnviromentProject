@@ -1,4 +1,5 @@
 ﻿using EnviromentProject.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,12 +25,27 @@ namespace EnviromentProject
             }
 
             builder.Services.AddSingleton<DbConnectionHelper>();
-            builder.Services.AddSingleton<UserRepository>();
+            //builder.Services.AddSingleton<UserRepository>();
             builder.Services.AddSingleton<EnvironmentRepository>();
             builder.Services.AddSingleton<ObjectRepository>();
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequiredLength = 10;
+            })
+            .AddRoles<IdentityRole>()
+            .AddDapperStores(options =>
+            {
+                options.ConnectionString = connectionString;
+            });
 
 
             var app = builder.Build();
+            app.UseAuthentication();
+
+
             app.MapGet("/", () => $"The API is up . Connection string found: : {(sqlConnectionStringFound ? "✔" : "❌")}");
 
 
@@ -43,9 +59,9 @@ namespace EnviromentProject
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.MapGroup("/account").MapIdentityApi<IdentityUser>();
+            app.MapControllers().RequireAuthorization();
 
-
-            app.MapControllers();
 
             app.Run();
         }
