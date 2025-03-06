@@ -17,17 +17,17 @@ namespace EnviromentProject
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            var connectionString = builder.Configuration["DefaultConnection"];
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = builder.Configuration.GetValue<string>("DefaultConnection");
+            //var connectionString = builder.Configuration["DefaultConnection"];
             var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(connectionString);
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new ArgumentException("No connection string found in appsettings.json");
             }
 
-            builder.Services.AddSingleton<DbConnectionHelper>();
-            //builder.Services.AddSingleton<UserRepository>();
-            builder.Services.AddSingleton<EnvironmentRepository>();
-            builder.Services.AddSingleton<ObjectRepository>();
+            builder.Services.AddTransient<EnvironmentRepository, EnvironmentRepository>(o => new EnvironmentRepository(connectionString));
+            builder.Services.AddTransient<ObjectRepository, ObjectRepository>(o=> new ObjectRepository(connectionString));
             builder.Services.AddAuthorization();
 
             builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
