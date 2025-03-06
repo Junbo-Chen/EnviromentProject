@@ -1,0 +1,7 @@
+# Unity .gitignore template: https://github.com/github/gitignore/blob/main/Unity.gitignore
+/[Tt]emp/
+/[Ll]ibrary/
+/[Bb]uild/
+/[Oo]bj/
+*.csproj
+*.sln
