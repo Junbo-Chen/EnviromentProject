@@ -10,7 +10,7 @@ namespace EnviromentProject.Data
 
         public DbConnectionHelper(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration["DefaultConnection"];
         }
 
         public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
