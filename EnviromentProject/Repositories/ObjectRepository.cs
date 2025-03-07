@@ -2,13 +2,14 @@
 using System.Data;
 using System.Linq;
 using Dapper;
+using EnviromentProject.Interface;
 using EnviromentProject.Model;
 using Microsoft.Data.SqlClient;
 using Object = EnviromentProject.Model.Object;
 
 namespace EnviromentProject.Data
 {
-    public class ObjectRepository
+    public class ObjectRepository : IObjectRepository
     {
         private readonly string _connectionString;
 

@@ -1,4 +1,5 @@
 ﻿using EnviromentProject.Data;
+using EnviromentProject.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +27,9 @@ namespace EnviromentProject
                 throw new ArgumentException("No connection string found in appsettings.json");
             }
 
+
             builder.Services.AddTransient<EnvironmentRepository, EnvironmentRepository>(o => new EnvironmentRepository(connectionString));
-            builder.Services.AddTransient<ObjectRepository, ObjectRepository>(o=> new ObjectRepository(connectionString));
+            builder.Services.AddTransient<IObjectRepository, ObjectRepository>(o=> new ObjectRepository(connectionString));
             builder.Services.AddAuthorization();
 
             builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>

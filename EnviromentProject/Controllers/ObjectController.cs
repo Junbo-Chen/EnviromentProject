@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EnviromentProject.Model;
 using EnviromentProject.Data;
 using Object = EnviromentProject.Model.Object;
+using EnviromentProject.Interface;
 
 namespace EnviromentProject.Controllers
 {
@@ -10,9 +11,9 @@ namespace EnviromentProject.Controllers
     [ApiController]
     public class ObjectController : ControllerBase
     {
-        private readonly ObjectRepository _objectRepository;
+        private readonly IObjectRepository _objectRepository;
 
-        public ObjectController(ObjectRepository objectRepository)
+        public ObjectController(IObjectRepository objectRepository)
         {
             _objectRepository = objectRepository;
         }
@@ -47,7 +48,8 @@ namespace EnviromentProject.Controllers
         {
             if (obj == null)
             {
-                return BadRequest(new { ErrorMessage = "Object2D is null or missing required fields." });
+                // Return a simple string instead of an anonymous object
+                return BadRequest("Object2D is null or missing required fields.");
             }
 
             try
@@ -57,7 +59,7 @@ namespace EnviromentProject.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ErrorMessage = $"Error while creating object: {ex.Message}" });
+                return StatusCode(500, $"Error while creating object: {ex.Message}");
             }
         }
 
