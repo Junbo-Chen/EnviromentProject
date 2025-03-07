@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+
 
 public class WorldObjectSpawner : MonoBehaviour
 {
@@ -64,19 +66,18 @@ public class WorldObjectSpawner : MonoBehaviour
             GameObject obj = Instantiate(prefab, cell);
             obj.transform.localPosition = Vector3.zero;
 
-            // Voeg direct het Object2DDataHolder component toe voordat Awake wordt aangeroepen
             var dataHolder = obj.GetComponent<Object2DDataHolder>();
             if (dataHolder == null)
             {
                 dataHolder = obj.AddComponent<Object2DDataHolder>();
-                dataHolder.Data = objData; // Zorg ervoor dat de data meteen wordt toegewezen
+                dataHolder.Data = objData;
             }
 
             DraggableItem draggable = obj.GetComponent<DraggableItem>();
             if (draggable != null)
             {
-                draggable.Data = objData; // Zorg ervoor dat de Data correct wordt toegewezen
-                draggable.spawner = this; // Koppel de spawner
+                draggable.Data = objData;
+                draggable.spawner = this;
             }
             else
             {
@@ -131,7 +132,15 @@ public class WorldObjectSpawner : MonoBehaviour
                     dataHolder.Data = responseData.Data;
 
                     DraggableItem draggable = item.GetComponent<DraggableItem>();
-                    if (draggable != null) draggable.spawner = this;
+                    if (draggable != null)
+                    {
+                        draggable.spawner = this;
+                    }
+                    else
+                    {
+                        Debug.LogError("DraggableItem ontbreekt op prefab: " + prefab.name);
+                    }
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
                 return;
             }
@@ -141,7 +150,6 @@ public class WorldObjectSpawner : MonoBehaviour
     private async Task<Object2D> CreateObjectData(GameObject prefab, Transform cell)
     {
         string environmentId = UserSession.Instance.EnvironmentId;
-        Debug.Log(environmentId);
         string token = UserSession.Instance.AccessToken;
         webClient.SetToken(token);
         if (string.IsNullOrEmpty(environmentId))
@@ -150,11 +158,13 @@ public class WorldObjectSpawner : MonoBehaviour
             return null;
         }
 
+        string newId = System.Guid.NewGuid().ToString();
+
         return new Object2D
         {
-            id = System.Guid.NewGuid().ToString(),
+            id = newId,
             prefabId = prefab.name,
-            environmentId = environmentId,
+            environmentId = environmentId, 
             positionX = cell.position.x,
             positionY = cell.position.y,
             scaleX = prefab.transform.localScale.x,

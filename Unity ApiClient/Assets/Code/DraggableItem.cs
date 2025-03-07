@@ -77,7 +77,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 return;
             }
 
-            // Gebruik wereldcoördinaten van de cel
+
             Vector3 cellWorldPosition = targetCell.position;
             Data.positionX = cellWorldPosition.x;
             Data.positionY = cellWorldPosition.y;
