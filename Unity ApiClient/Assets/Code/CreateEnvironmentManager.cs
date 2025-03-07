@@ -39,7 +39,7 @@ public class CreateEnvironmentManager : MonoBehaviour
 
         try
         {
-            string token = PlayerPrefs.GetString("accessToken");
+            string token = UserSession.Instance.AccessToken;
             if (string.IsNullOrEmpty(token))
             {
                 ShowError("Je moet ingelogd zijn!", true);
