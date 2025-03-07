@@ -14,8 +14,7 @@ public class Navigation : MonoBehaviour
         // Alleen uitvoeren als welcomeText bestaat
         if (welcomeText != null)
         {
-            string email = PlayerPrefs.GetString("email", "Gebruiker");
-            //string accessToken = PlayerPrefs.GetString("accessToken");
+            string email = UserSession.Instance.Email ?? "Gebruiker";
             welcomeText.text = "Welkom, " + email + "!";
         }
 
@@ -30,7 +29,8 @@ public class Navigation : MonoBehaviour
         {
             HomeButton.onClick.AddListener(OnHomeButtonClicked);
         }
-        if (LogoutButton != null){
+        if (LogoutButton != null)
+        {
             LogoutButton.onClick.AddListener(OnLogoutButtonClicked);
         }
     }
@@ -47,9 +47,7 @@ public class Navigation : MonoBehaviour
 
     private async void OnLogoutButtonClicked()
     {
-        PlayerPrefs.DeleteKey("email");
-        PlayerPrefs.DeleteKey("token");
-        PlayerPrefs.Save();
+        UserSession.Instance.ClearSession();
         SceneManager.LoadScene("SampleScene");
     }
 }

@@ -39,8 +39,8 @@ public class WorldObjectSpawner : MonoBehaviour
 
     private async void LoadExistingObjects()
     {
-        string environmentId = PlayerPrefs.GetString("environmentId");
-        string token = PlayerPrefs.GetString("accessToken");
+        string environmentId = UserSession.Instance.EnvironmentId;
+        string token = UserSession.Instance.AccessToken;
         webClient.SetToken(token);
         var response = await apiClient.ReadObject2Ds(environmentId);
 
@@ -140,8 +140,9 @@ public class WorldObjectSpawner : MonoBehaviour
 
     private async Task<Object2D> CreateObjectData(GameObject prefab, Transform cell)
     {
-        string environmentId = PlayerPrefs.GetString("environmentId", "");
-        string token = PlayerPrefs.GetString("accessToken");
+        string environmentId = UserSession.Instance.EnvironmentId;
+        Debug.Log(environmentId);
+        string token = UserSession.Instance.AccessToken;
         webClient.SetToken(token);
         if (string.IsNullOrEmpty(environmentId))
         {

@@ -19,7 +19,7 @@ public class Environment2DApiClient : MonoBehaviour
 
     public async Awaitable<IWebRequestReponse> ReadEnvironment2Ds() 
     {
-        string token = PlayerPrefs.GetString("accessToken");
+        string token = UserSession.Instance.AccessToken;
         webClient.SetToken(token);
         string route = "api/environments";
 
@@ -29,7 +29,7 @@ public class Environment2DApiClient : MonoBehaviour
 
     public async Awaitable<IWebRequestReponse> CreateEnvironment(Environment2D environment)
     {
-        string token = PlayerPrefs.GetString("accessToken");
+        string token = UserSession.Instance.AccessToken;
         webClient.SetToken(token);
         string route = "api/environments";
         string data = JsonUtility.ToJson(environment);

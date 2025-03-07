@@ -6,13 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class LoginController : MonoBehaviour
 {
-    public InputField emailInputField; 
+    public InputField emailInputField;
     public InputField passwordInputField;
     public Button loginButton;
     public Button registerButton;
     public Text messageText;
 
-    // Referentie naar de WebClient
     public WebClient webClient;
 
     private void Start()
@@ -36,11 +35,8 @@ public class LoginController : MonoBehaviour
                 Debug.Log("Login successful! Response: " + successResponse.Data);
                 var responseData = JsonUtility.FromJson<LoginResponse>(successResponse.Data);
                 Debug.Log("Token opslaan: " + responseData.accessToken);
-                Debug.Log("Response JSON: " + successResponse.Data);
 
-                PlayerPrefs.SetString("email", email);
-                PlayerPrefs.SetString("accessToken", responseData.accessToken);
-                PlayerPrefs.Save();
+                UserSession.Instance.SetUser(email, responseData.accessToken);
 
                 SceneManager.LoadScene("Enviroment");
             }
@@ -57,7 +53,6 @@ public class LoginController : MonoBehaviour
         }
     }
 
-
     private async void OnRegisterButtonClicked()
     {
         string email = emailInputField.text;
@@ -65,7 +60,6 @@ public class LoginController : MonoBehaviour
 
         if (!IsValidEmail(email))
         {
-            Debug.LogError("Ongeldig e-mailadres!");
             messageText.text = "Ongeldig e-mailadres!";
             messageText.color = Color.black;
             return;
@@ -73,7 +67,6 @@ public class LoginController : MonoBehaviour
 
         if (!IsValidPassword(password))
         {
-            Debug.LogError("Wachtwoord voldoet niet aan de eisen!");
             messageText.text = "Wachtwoord voldoet niet aan de eisen!";
             messageText.color = Color.black;
             return;
@@ -83,20 +76,18 @@ public class LoginController : MonoBehaviour
 
         try
         {
+            Debug.Log("test");
             var response = await webClient.SendPostRequest("/account/register", jsonData);
             if (response is WebRequestData<string> successResponse)
             {
-                Debug.Log("Registratie succesvol! Response: " + successResponse.Data);
-                var responseData = JsonUtility.FromJson<LoginResponse>(successResponse.Data);
-
-                PlayerPrefs.SetString("email", email);
-                PlayerPrefs.SetString("accessToken", responseData.accessToken);
-                PlayerPrefs.Save();
-                SceneManager.LoadScene("Enviroment");
+                Debug.Log("register successful! Response: " + successResponse.Data);
+                //var responseData = JsonUtility.FromJson<LoginResponse>(successResponse.Data);
+                messageText.text = "register successful!";
+                //UserSession.Instance.SetUser(email, responseData.accessToken);
+                //SceneManager.LoadScene("Enviroment");
             }
             else if (response is WebRequestError errorResponse)
             {
-                Debug.LogError("Registratie mislukt: " + errorResponse.ErrorMessage);
                 messageText.text = "Dit e-mailadres is al in gebruik!";
                 messageText.color = Color.black;
             }
@@ -107,19 +98,9 @@ public class LoginController : MonoBehaviour
         }
     }
 
-    private bool IsValidEmail(string email)
-    {
-        return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-    }
+    private bool IsValidEmail(string email) => Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+    private bool IsValidPassword(string password) => password.Length >= 10 && Regex.IsMatch(password, @"[a-z]") && Regex.IsMatch(password, @"[A-Z]") && Regex.IsMatch(password, @"\d") && Regex.IsMatch(password, @"[^a-zA-Z0-9]");
 
-    private bool IsValidPassword(string password)
-    {
-        return password.Length >= 10 &&
-               Regex.IsMatch(password, @"[a-z]") &&
-               Regex.IsMatch(password, @"[A-Z]") &&
-               Regex.IsMatch(password, @"\d") &&
-               Regex.IsMatch(password, @"[^a-zA-Z0-9]");
-    }
     [System.Serializable]
     public class LoginResponse
     {

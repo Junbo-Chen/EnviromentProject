@@ -17,14 +17,12 @@ public class Object2DApiClient : MonoBehaviour
 
     public async Awaitable<IWebRequestReponse> CreateObject2D(Object2D object2D)
     {
-        string token = PlayerPrefs.GetString("accessToken");
+        string token = UserSession.Instance.AccessToken;
         webClient.SetToken(token);
         string route = "api/objects";
         string data = JsonUtility.ToJson(object2D);
 
         IWebRequestReponse webRequestResponse = await webClient.SendPostRequest(route, data);
-        return ParseObject2DResponse(webRequestResponse);
-
         return ParseObject2DResponse(webRequestResponse);
     }
 

@@ -21,10 +21,8 @@ public class EnvironmentItemUI : MonoBehaviour
 
     private void LoadWorldScene()
     {
-        PlayerPrefs.SetString("environmentId", environmentId);
-        Debug.Log(environmentId);
-        
-        PlayerPrefs.Save();
+        UserSession.Instance.SetEnvironmentId(environmentId);
+
         SceneManager.LoadScene("World");
     }
 }
