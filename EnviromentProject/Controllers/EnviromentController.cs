@@ -53,21 +53,24 @@ namespace EnviromentProject.Controllers
             {
                 return BadRequest("Invalid environment data.");
             }
-
             // Haal UserId op uit JWT-token
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
             if (string.IsNullOrEmpty(userId))
             {
                 return Unauthorized("User not authenticated.");
             }
 
-            environment.UserId = userId; // Koppel de gebruiker aan het Environment-object
+            // Check if user already has 5 environments
+            var userEnvironments = _environmentRepository.GetEnvironmentsByUserId(userId);
+            if (userEnvironments.Count() >= 5)
+            {
+                return BadRequest("You have reached the maximum limit of 5 environments.");
+            }
 
+            environment.UserId = userId; // Koppel de gebruiker aan het Environment-object
             _environmentRepository.InsertEnvironment(environment);
             return CreatedAtAction(nameof(Get), new { id = environment.Id }, environment);
         }
-
         // 🔹 PUT: api/environments/{id}
         [HttpPut("{id}")]
         public ActionResult Put(Guid id, [FromBody] Environment updatedEnvironment)
@@ -78,14 +81,24 @@ namespace EnviromentProject.Controllers
                 return NotFound();
             }
 
+            // Check if user owns this environment
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not authenticated.");
+            }
+
+            if (existingEnvironment.UserId != userId)
+            {
+                return Forbid("You can only modify your own environments.");
+            }
+
             existingEnvironment.Name = updatedEnvironment.Name;
             existingEnvironment.MaxHeight = updatedEnvironment.MaxHeight;
             existingEnvironment.MaxLength = updatedEnvironment.MaxLength;
-
             _environmentRepository.UpdateEnvironment(existingEnvironment);
             return NoContent();
         }
-
         // 🔹 DELETE: api/environments/{id}
         [HttpDelete("{id}")]
         public ActionResult Delete(Guid id)
@@ -94,6 +107,17 @@ namespace EnviromentProject.Controllers
             if (environment == null)
             {
                 return NotFound();
+            }
+
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not authenticated.");
+            }
+
+            if (environment.UserId != userId)
+            {
+                return Forbid("You can only delete your own environments.");
             }
 
             _environmentRepository.DeleteEnvironment(id);
