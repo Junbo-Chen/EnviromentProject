@@ -1,0 +1,1210 @@
+{
+	"info": {
+		"_postman_id": "ffc0f1e6-06c8-410a-882e-c0c76e0e6351",
+		"name": "test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41981283"
+	},
+	"item": [
+		{
+			"name": "account",
+			"item": [
+				{
+					"name": "register",
+					"item": [
+						{
+							"name": "/account/register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Register succesvol\", function(done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: { \"Content-Type\": \"application/json\" },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                email: \"testuser@example12.com\",\r",
+											"                password: \"TEstuser@example.com1\"\r",
+											"            })\r",
+											"        }\r",
+											"    }, function(err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code');\r",
+											"        pm.expect(res.code).to.eql(200);\r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Register faalt bij bestaande e-mail\", function(done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: { \"Content-Type\": \"application/json\" },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                email: \"testuser@example.com\",\r",
+											"                password: \"Testuser@example.com1\"\r",
+											"            })\r",
+											"        }\r",
+											"    }, function(err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code', 400);\r",
+											"        done();\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/problem+json"
+									}
+								],
+								"url": {
+									"raw": "https://avansict2228097.azurewebsites.net/account/register",
+									"protocol": "https",
+									"host": [
+										"avansict2228097",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"account",
+										"register"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/account/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"account",
+												"register"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/problem+json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/account/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"account",
+												"register"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/problem+json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\",\n  \"errors\": {\n    \"Lorem_6\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"quis_40\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "/account/login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Login fail unknown input\", function(done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: { \"Content-Type\": \"application/json\" },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                email: \"ikwilijseten\",\r",
+											"                password: \"yes\"\r",
+											"            })\r",
+											"        }\r",
+											"    }, function(err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code');\r",
+											"        pm.expect(res.code).to.eql(401);\r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Login faalt bij verkeerd wachtwoord\", function(done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: { \"Content-Type\": \"application/json\" },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                email: \"test@test.nl\",\r",
+											"                password: \"WrongPassword\"\r",
+											"            })\r",
+											"        }\r",
+											"    }, function(err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code');\r",
+											"        pm.expect(res.code).to.eql(401);\r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Login succesvol\", function(done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: { \"Content-Type\": \"application/json\" },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                email: \"testuser@example12.com\",\r",
+											"                password: \"TEstuser@example.com1\"\r",
+											"            })\r",
+											"        }\r",
+											"    }, function(err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code', 200);\r",
+											"        const jsonData = res.json();\r",
+											"        \r",
+											"        // Log de ontvangen accessToken\r",
+											"        console.log(\"Received accessToken: \" + jsonData.accessToken);\r",
+											"        \r",
+											"        // Sla de JWT token op\r",
+											"        pm.collectionVariables.set(\"bearer_token\", jsonData.accessToken);\r",
+											"\r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://avansict2228097.azurewebsites.net/account/login?useCookies=false&useSessionCookies=false",
+									"protocol": "https",
+									"host": [
+										"avansict2228097",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"account",
+										"login"
+									],
+									"query": [
+										{
+											"key": "useCookies",
+											"value": "false"
+										},
+										{
+											"key": "useSessionCookies",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"<string>\",\n  \"password\": \"<string>\",\n  \"twoFactorCode\": \"<string>\",\n  \"twoFactorRecoveryCode\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/account/login?useCookies=<boolean>&useSessionCookies=<boolean>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"account",
+												"login"
+											],
+											"query": [
+												{
+													"key": "useCookies",
+													"value": "<boolean>"
+												},
+												{
+													"key": "useSessionCookies",
+													"value": "<boolean>"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"accessToken\": \"<string>\",\n  \"expiresIn\": \"<long>\",\n  \"refreshToken\": \"<string>\",\n  \"tokenType\": \"<string>\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "environments",
+					"item": [
+						{
+							"name": "{id}",
+							"item": [
+								{
+									"name": "/api/environments/:id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Get environment succesvol\", function(done) {\r",
+													"    const bearerToken = pm.collectionVariables.get(\"bearer_token\");\r",
+													"\r",
+													"    pm.sendRequest({\r",
+													"        url: pm.request.url.toString() + \"/\" + pm.collectionVariables.get(\"environment_id\"),\r",
+													"        method: \"GET\",\r",
+													"        header: {\r",
+													"            \"Authorization\": \"Bearer \" + bearerToken\r",
+													"        }\r",
+													"    }, function(err, res) {\r",
+													"        if (err) { \r",
+													"            return done(err); \r",
+													"        }\r",
+													"        pm.expect(res).to.have.property('code', 200);\r",
+													"        done();\r",
+													"    });\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Get environment faalt zonder token\", function(done) {\r",
+													"    pm.sendRequest({\r",
+													"        url: pm.request.url.toString() + \"/\" + pm.collectionVariables.get(\"environment_id\"),\r",
+													"        method: \"GET\"\r",
+													"    }, function(err, res) {\r",
+													"        if (err) { return done(err); }\r",
+													"        pm.expect(res).to.have.property('code', 401);\r",
+													"        done();\r",
+													"    });\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "https://avansict2228097.azurewebsites.net/api/environments/",
+											"protocol": "https",
+											"host": [
+												"avansict2228097",
+												"azurewebsites",
+												"net"
+											],
+											"path": [
+												"api",
+												"environments",
+												""
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/environments/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"environments",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"maxHeight\": \"<integer>\",\n  \"maxLength\": \"<integer>\",\n  \"userId\": \"<string>\"\n}"
+										}
+									]
+								},
+								{
+									"name": "/api/environments/:id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Delete environment succesvol\", function(done) {\r",
+													"    let environmentId = pm.collectionVariables.get(\"environment_id\");\r",
+													"    \r",
+													"    pm.sendRequest({\r",
+													"        url: \"https://avansict2228097.azurewebsites.net/api/environments/\" + environmentId,\r",
+													"        method: \"DELETE\",\r",
+													"        header: {\r",
+													"            \"Authorization\": \"Bearer \" + pm.collectionVariables.get(\"bearer_token\")\r",
+													"        }\r",
+													"    }, function(err, res) {\r",
+													"        if (err) { return done(err); }\r",
+													"        pm.expect(res).to.have.property('code', 204);\r",
+													"\r",
+													"        // Controleer of het environment echt weg is\r",
+													"        pm.sendRequest({\r",
+													"            url: \"https://avansict2228097.azurewebsites.net/api/environments/\" + environmentId,\r",
+													"            method: \"GET\",\r",
+													"            header: {\r",
+													"                \"Authorization\": \"Bearer \" + pm.collectionVariables.get(\"bearer_token\")\r",
+													"            }\r",
+													"        }, function(err2, res2) {\r",
+													"            pm.expect(res2).to.have.property('code', 404);\r",
+													"            done();\r",
+													"        });\r",
+													"    });\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Delete environment faalt zonder token\", function(done) {\r",
+													"    let environmentId = pm.collectionVariables.get(\"environment_id\");\r",
+													"    \r",
+													"    pm.sendRequest({\r",
+													"        url: \"https://avansict2228097.azurewebsites.net/api/environments/\" + environmentId,\r",
+													"        method: \"DELETE\"\r",
+													"    }, function(err, res) {\r",
+													"        if (err) { return done(err); }\r",
+													"        pm.expect(res).to.have.property('code', 401);\r",
+													"        done();\r",
+													"    });\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "https://avansict2228097.azurewebsites.net/api/environments/:id",
+											"protocol": "https",
+											"host": [
+												"avansict2228097",
+												"azurewebsites",
+												"net"
+											],
+											"path": [
+												"api",
+												"environments",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<uuid>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/environments/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"environments",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "/api/environments",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get All Environments succesvol\", function (done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"GET\",\r",
+											"        header: { \r",
+											"            \"Authorization\": \"Bearer \" + pm.collectionVariables.get(\"bearer_token\")\r",
+											"        }\r",
+											"    }, function (err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code', 200);\r",
+											"        \r",
+											"        const jsonData = res.json();\r",
+											"        pm.expect(jsonData).to.be.an('array');\r",
+											"        pm.expect(jsonData.length).to.be.at.least(1); \r",
+											"        \r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Get All Environments faalt zonder token\", function (done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"GET\"\r",
+											"    }, function (err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code', 401); \r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "https://avansict2228097.azurewebsites.net/api/environments",
+									"protocol": "https",
+									"host": [
+										"avansict2228097",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"api",
+										"environments"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/environments",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"environments"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"name\": \"<string>\",\n    \"maxHeight\": \"<integer>\",\n    \"maxLength\": \"<integer>\",\n    \"userId\": \"<string>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"name\": \"<string>\",\n    \"maxHeight\": \"<integer>\",\n    \"maxLength\": \"<integer>\",\n    \"userId\": \"<string>\"\n  }\n]"
+								}
+							]
+						},
+						{
+							"name": "/api/environments",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create environment succesvol\", function(done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: {\r",
+											"            \"Content-Type\": \"application/json\",\r",
+											"            \"Authorization\": \"Bearer \" + pm.collectionVariables.get(\"bearer_token\")\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                name: \"Test4Environment\",\r",
+											"                userId: 'bca67bdc-f8d2-4728-a5e4-94b1d8c05784',\r",
+											"                MaxHeight: 100,\r",
+											"                MaxLength: 100 \r",
+											"            })\r",
+											"        }\r",
+											"    }, function(err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code', 201);\r",
+											"        const jsonData = res.json();\r",
+											"        console.log(jsonData);\r",
+											"        pm.collectionVariables.set(\"environment_id\", jsonData.id);\r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Create environment faalt zonder token\", function(done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: { \"Content-Type\": \"application/json\" },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                name: \"Unauthorized Environment\",\r",
+											"                userId: \"bca67bdc-f8d2-4728-a5e4-94b1d8c05784\",\r",
+											"                height: 200,  // example height\r",
+											"                length: 300   // example length\r",
+											"            })\r",
+											"        }\r",
+											"    }, function(err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code', 401);  // Expect 401 Unauthorized\r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "CfDJ8J3c9nFpRUNGtbXJMLX5z56jnWWiIoHuIFjkS59lMfdc5PVinWXkzRkurNwUmMUr6LK2HncFWG2Enn7S1DjoCnEQIe6p3gDWmK6rLKvJ4xwyyCbfHavuNaBUJGHT5h2RkKkH-Ao2sMSGiHb81P0nI5Xk0_686t271Nz7eF8eRebQrTOOCnmE7-G-4YSMwxfosquZzbLNGJI15xF4AC9v7Spf_2MUDWqL2Z8sQkoXRR_Gd79o9_dCUbhB4ap-0r4mQo-gW6Z7hqhTSelodD8LEv4ogJnCqVWCuv1ynwD2TArOlX_gzb4fiv_fqzNxKz2NsnkPPjtFs59SGTkfQW_6iejQc38p97W1CLEIs2mo1-c6ggY3UHQiXcZyv21eb--T09iVuCXLUdwn7-E4J9zvHNUiJzkpVD0Jn3Eql9OZe_LwOaqrSYaBunKaf8CKZ3UJtMlJjWAqg3vsBesmJrxTLEbzfGLAJU2IlSgOgxzN0LhlUkoypcUx-Twix6aMeZKlnB0IJMFKcGTl_ybbBvKo-nnPKjYWH12A7eaAonnPwLorKEuycC0zaGOEG6d9Bj5ZEJR3wJ8Ajp2-bwP6HXFd1PL4Q9tzM-iIiXKwLeAhmt6EmlYWjrapBGPhqL9QROFqvO-qmAlgH7VARkh55wqLRr4gUK9df8OM2WQ5DC2LLiu5yyoYaRbaMvVnvl80oZitqA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"maxHeight\": \"<integer>\",\n  \"maxLength\": \"<integer>\",\n  \"userId\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://avansict2228097.azurewebsites.net/api/environments",
+									"protocol": "https",
+									"host": [
+										"avansict2228097",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"api",
+										"environments"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"maxHeight\": \"<integer>\",\n  \"maxLength\": \"<integer>\",\n  \"userId\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/environments",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"environments"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "objects",
+					"item": [
+						{
+							"name": "environment",
+							"item": [
+								{
+									"name": "{environmentId}",
+									"item": [
+										{
+											"name": "/api/objects/environment/:environmentId",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Get alle objecten van environment\", function (done) {\r",
+															"    let environmentId = pm.collectionVariables.get(\"environment_id\");\r",
+															"\r",
+															"    // Controleer of environmentId aanwezig is\r",
+															"    pm.expect(environmentId).to.not.be.undefined;\r",
+															"    pm.expect(environmentId).to.not.be.null;\r",
+															"\r",
+															"    pm.sendRequest({\r",
+															"        url: pm.request.url.toString() + \"/\" + environmentId,\r",
+															"        method: \"GET\",\r",
+															"        header: {\r",
+															"            \"Authorization\": \"Bearer \" + pm.collectionVariables.get(\"bearer_token\")\r",
+															"        }\r",
+															"    }, function (err, res) {\r",
+															"        if (err) { return done(err); }\r",
+															"\r",
+															"        pm.expect(res).to.have.property('code', 200);  // Controleer HTTP-status 200 OK\r",
+															"        \r",
+															"        const jsonData = res.json();\r",
+															"        pm.expect(jsonData).to.be.an(\"array\");  // Controleer of het resultaat een lijst (array) is\r",
+															"\r",
+															"        if (jsonData.length > 0) {\r",
+															"            pm.expect(jsonData[0]).to.have.property(\"id\");  // Controleer of objecten een ID hebben\r",
+															"            pm.expect(jsonData[0]).to.have.property(\"environmentId\", environmentId); // Bevestig dat ze bij het juiste environment horen\r",
+															"        }\r",
+															"\r",
+															"        done();\r",
+															"    });\r",
+															"});\r",
+															""
+														],
+														"type": "text/javascript",
+														"packages": {}
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "https://avansict2228097.azurewebsites.net/api/objects/environment",
+													"protocol": "https",
+													"host": [
+														"avansict2228097",
+														"azurewebsites",
+														"net"
+													],
+													"path": [
+														"api",
+														"objects",
+														"environment"
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/objects/environment/:environmentId",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"objects",
+																"environment",
+																":environmentId"
+															],
+															"variable": [
+																{
+																	"key": "environmentId"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": \"<uuid>\",\n    \"prefabId\": \"<double>\",\n    \"positionX\": \"<double>\",\n    \"positionY\": \"<double>\",\n    \"scaleX\": \"<double>\",\n    \"scaleY\": \"<double>\",\n    \"rotationZ\": \"<double>\",\n    \"sortingLayer\": \"<integer>\",\n    \"environmentId\": \"<uuid>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"prefabId\": \"<double>\",\n    \"positionX\": \"<double>\",\n    \"positionY\": \"<double>\",\n    \"scaleX\": \"<double>\",\n    \"scaleY\": \"<double>\",\n    \"rotationZ\": \"<double>\",\n    \"sortingLayer\": \"<integer>\",\n    \"environmentId\": \"<uuid>\"\n  }\n]"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "{id}",
+							"item": [
+								{
+									"name": "/api/objects/:id",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/objects/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"objects",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<uuid>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/objects/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"objects",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"id\": \"<uuid>\",\n  \"prefabId\": \"<double>\",\n  \"positionX\": \"<double>\",\n  \"positionY\": \"<double>\",\n  \"scaleX\": \"<double>\",\n  \"scaleY\": \"<double>\",\n  \"rotationZ\": \"<double>\",\n  \"sortingLayer\": \"<integer>\",\n  \"environmentId\": \"<uuid>\"\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "/api/objects",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create Object faalt zonder environmentId\", function (done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: { \r",
+											"            \"Authorization\": \"Bearer \" + pm.collectionVariables.get(\"bearer_token\"),\r",
+											"            \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                obj: {\r",
+											"                    prefabId: 1,\r",
+											"                    positionX: 2.5,\r",
+											"                    positionY: 3.0,\r",
+											"                    scaleX: 1.0,\r",
+											"                    scaleY: 1.0,\r",
+											"                    rotationZ: 0,\r",
+											"                    sortingLayer: 0,\r",
+											"                }\r",
+											"            })\r",
+											"        }\r",
+											"    }, function (err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code', 500);\r",
+											"        \r",
+											"        \r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Create Object succesvol\", function (done) {\r",
+											"    pm.sendRequest({\r",
+											"        url: pm.request.url.toString(),\r",
+											"        method: \"POST\",\r",
+											"        header: { \r",
+											"            \"Authorization\": \"Bearer \" + pm.collectionVariables.get(\"bearer_token\"),\r",
+											"            \"Content-Type\": \"application/json\"\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: \"raw\",\r",
+											"            raw: JSON.stringify({\r",
+											"                prefabId: 1,\r",
+											"                positionX: 4.0,\r",
+											"                positionY: 5.0,\r",
+											"                scaleX: 1.2,\r",
+											"                scaleY: 1.2,\r",
+											"                rotationZ: 15,\r",
+											"                sortingLayer: 1,\r",
+											"                environmentId: pm.collectionVariables.get(\"environment_id\")\r",
+											"            })\r",
+											"        }\r",
+											"    }, function (err, res) {\r",
+											"        if (err) { return done(err); }\r",
+											"        pm.expect(res).to.have.property('code', 201);\r",
+											"        const jsonData = res.json();\r",
+											"        pm.expect(jsonData.id).to.exist;\r",
+											"        pm.collectionVariables.set(\"object_id\", jsonData.id);\r",
+											"        \r",
+											"        done();\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://avansict2228097.azurewebsites.net/api/objects",
+									"protocol": "https",
+									"host": [
+										"avansict2228097",
+										"azurewebsites",
+										"net"
+									],
+									"path": [
+										"api",
+										"objects"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"id\": \"<uuid>\",\n  \"prefabId\": \"<double>\",\n  \"positionX\": \"<double>\",\n  \"positionY\": \"<double>\",\n  \"scaleX\": \"<double>\",\n  \"scaleY\": \"<double>\",\n  \"rotationZ\": \"<double>\",\n  \"sortingLayer\": \"<integer>\",\n  \"environmentId\": \"<uuid>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/objects",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"objects"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/"
+		},
+		{
+			"key": "bearer_token",
+			"value": ""
+		},
+		{
+			"key": "environment_id",
+			"value": ""
+		},
+		{
+			"key": "object_id",
+			"value": ""
+		}
+	]
+}

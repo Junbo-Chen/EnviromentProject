@@ -48,12 +48,33 @@ namespace EnviromentProject.Controllers
         {
             if (obj == null)
             {
-                // Return a simple string instead of an anonymous object
                 return BadRequest("Object2D is null or missing required fields.");
             }
 
             try
             {
+                // Authenticate user
+                var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized("User not authenticated.");
+                }
+
+                // Verify that the environment belongs to the user
+                var environment = _environmentRepository.GetEnvironmentById(obj.EnvironmentId);
+                if (environment == null)
+                {
+                    return BadRequest("The specified environment does not exist.");
+                }
+
+                if (environment.UserId != userId)
+                {
+                    return Forbid("You can only add objects to your own environments.");
+                }
+
+                // Set the creator ID
+                obj.CreatedBy = userId;
+
                 _objectRepository.InsertObject(obj);
                 return CreatedAtAction(nameof(GetObject), new { id = obj.Id }, obj);
             }
@@ -73,6 +94,19 @@ namespace EnviromentProject.Controllers
                 return NotFound();
             }
 
+            // Authenticate user
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not authenticated.");
+            }
+
+            // Verify that the user is the creator of the object
+            if (existingObject.CreatedBy != userId)
+            {
+                return Forbid("You can only modify objects you created.");
+            }
+
             existingObject.PrefabId = updatedObject.PrefabId;
             existingObject.PositionX = updatedObject.PositionX;
             existingObject.PositionY = updatedObject.PositionY;
@@ -80,7 +114,6 @@ namespace EnviromentProject.Controllers
             existingObject.ScaleY = updatedObject.ScaleY;
             existingObject.RotationZ = updatedObject.RotationZ;
             existingObject.SortingLayer = updatedObject.SortingLayer;
-
             _objectRepository.UpdateObject(existingObject);
             return NoContent();
         }
@@ -93,6 +126,19 @@ namespace EnviromentProject.Controllers
             if (obj == null)
             {
                 return NotFound();
+            }
+
+            // Authenticate user
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not authenticated.");
+            }
+
+            // Verify that the user is the creator of the object
+            if (obj.CreatedBy != userId)
+            {
+                return Forbid("You can only delete objects you created.");
             }
 
             _objectRepository.DeleteObject(id);
